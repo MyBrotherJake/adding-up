@@ -48,19 +48,19 @@ rl.on('line', lineString=>{
 //close Event
 rl.on('close', ()=>{
     //変化率
-    for(let [key, value] of prefectureDataMap){
-        value.change = value.popu15 / value.popu10;
+    for(let [key, data] of prefectureDataMap){
+        data.change = data.popu15 / data.popu10;
     }
-    //配列をソート
+    //配列をソート 比較元(pair1)と比較先(pair2)
     const rankingArray = Array.from(prefectureDataMap).sort((pair1, pair2) =>{        
+        //pair1[0], pair2[0]は都道府県(key)
+        //pair1[1], pair2[1]は連想配列のオブジェクト
         //変化率を降順        
         return pair2[1].change - pair1[1].change;
     });
-    const rankingStrings = rankingArray.map(([key, value]) =>{
-        return (
-            //key + ': ' + value.popu10 + '=>' + value.popu15 + ' 変化率:' + value.change
-            `${key} : ${value.popu10} => ${value.popu15} 変化率: ${value.change}`
-        );
+    const rankingStrings = rankingArray.map(([key, data], num) =>{
+        let rank = num + 1;
+        return `第 ${rank} 位: ${key} : ${data.popu10} => ${data.popu15} 変化率: ${data.change}`;        
     })
     console.log(rankingStrings);
 })
